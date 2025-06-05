@@ -1,9 +1,11 @@
 {
     "cSpell.words": [
-        "tmpfs",
-        "whatsie",
         "chrono",
+        "lldb",
         "rustfmt",
-        "rustup"
+        "rustup",
+        "tmpfs",
+        "vadimcn",
+        "whatsie"
     ]
 }

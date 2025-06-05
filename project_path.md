@@ -8,6 +8,26 @@
 
 {project_path}
 
+## Development Environment
+
+```bash
+# VS Code Environment
+VS Code Version: 1.100.2
+
+Installed Rust-related extensions:
+dustypomerleau.rust-syntax@0.6.1
+jinxdash.prettier-rust@0.1.9
+rust-lang.rust-analyzer@0.3.2482
+vadimcn.vscode-lldb@1.11.5
+zhangyue.rust-mod-generator@1.0.10
+
+# Rust Version
+rustc 1.87.0 (17067e9ac 2025-05-09)
+
+# Cargo Version
+cargo 1.87.0 (99624be96 2025-05-06)
+```
+
 ## OS Version
 
 System Commands Output:
@@ -44,8 +64,8 @@ Model:                                   58
 
 # Memory Status
 total        used        free      shared  buff/cache   available
-Mem:            15Gi       9.4Gi       433Mi       794Mi       6.7Gi       6.0Gi
-Swap:           16Gi       9.8Mi        16Gi
+Mem:            15Gi       9.4Gi       640Mi       802Mi       6.5Gi       6.0Gi
+Swap:           16Gi        11Mi        16Gi
 
 # Disk Usage (Local Hard Drives Only)
 /dev/sda1        23G   19G  2.9G  87% /

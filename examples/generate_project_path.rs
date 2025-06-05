@@ -3,6 +3,52 @@ use std::io::Write;
 use std::time::SystemTime;
 use chrono::{DateTime, Utc};
 use std::process::Command;
+use std::env;
+
+fn check_vscode_installation() -> String {
+    let mut result = String::new();
+    
+    // Add VS Code path to PATH if not present
+    if let Ok(path) = env::var("PATH") {
+        if !path.contains("/usr/share/code") {
+            unsafe {
+                env::set_var("PATH", format!("{}:/usr/share/code", path));
+            }
+        }
+    }
+    
+    // Check VS Code version
+    match execute_command("code --version | head -n 1") {
+        version if !version.contains("Error") => {
+            result.push_str(&format!("VS Code Version: {}\n", version));
+        }
+        _ => {
+            result.push_str("VS Code is not installed or not in PATH (/usr/share/code)\n");
+            return result;
+        }
+    }
+
+    // Check installed extensions
+    let extensions = execute_command("code --list-extensions --show-versions");
+    if !extensions.contains("Error") {
+        // Filter relevant extensions
+        let relevant_exts = extensions.lines()
+            .filter(|line| {
+                line.contains("rust-lang") || 
+                line.contains("vadimcn") || 
+                line.contains("rust")
+            })
+            .collect::<Vec<&str>>()
+            .join("\n");
+        
+        if !relevant_exts.is_empty() {
+            result.push_str("\nInstalled Rust-related extensions:\n");
+            result.push_str(&relevant_exts);
+        }
+    }
+
+    result
+}
 
 fn main() -> std::io::Result<()> {
     let template = format!(
@@ -15,6 +61,19 @@ fn main() -> std::io::Result<()> {
 ## Project Path
 
 {{project_path}}
+
+## Development Environment
+
+```bash
+# VS Code Environment
+{}
+
+# Rust Version
+{}
+
+# Cargo Version
+{}
+```
 
 ## OS Version
 
@@ -45,23 +104,21 @@ Kernel: {}
 {} UTC
 (Get file creation time with: `stat -c '%y' project_path.md`)
 "#,
+        check_vscode_installation(),
+        execute_command("rustc --version"),
+        execute_command("cargo --version"),
         execute_command("uname -m"),
         execute_command("uname -r"),
         execute_command("cat /etc/os-release"),
         execute_command("lscpu | head -n 10"),
         execute_command("free -h"),
-        execute_command("df -h | grep '^/dev/sd'"), // Show only local hard drives
+        execute_command("df -h | grep '^/dev/sd'"),
         get_current_datetime()
     );
 
-    let filename = "project_path.md";
-    let mut file = File::create(filename)?;
+    let mut file = File::create("project_path.md")?;
     file.write_all(template.as_bytes())?;
-    
-    // Get absolute path
-    let absolute_path = std::fs::canonicalize(filename)?;
-    println!("File created successfully at: {}", absolute_path.display());
-    
+    println!("File created successfully at: {}", std::fs::canonicalize("project_path.md")?.display());
     Ok(())
 }
 
