@@ -24,6 +24,7 @@ touch README.md \
 
 - Create a new file with name project_path.md and add header project name , project create, os version
 - Pls add the date of create file with timezone
+- Pls run the program on the console and fix the error until you have no error anymore. For each rerun ask for next procedure.
   
 I never plan never far ahead. Carpe diam
 

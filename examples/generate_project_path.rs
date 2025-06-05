@@ -5,6 +5,48 @@ use chrono::{DateTime, Utc};
 use std::process::Command;
 use std::env;
 
+fn main() -> std::io::Result<()> {
+    let args: Vec<String> = env::args().collect();
+    let project_name = args.get(1).map(|s| s.as_str()).unwrap_or("default_project");
+    
+    init_cargo_project(project_name)
+}
+
+// Helper functions first
+fn execute_command(cmd: &str) -> String {
+    if cmd.contains("|") {
+        // Handle piped commands
+        Command::new("sh")
+            .arg("-c")
+            .arg(cmd)
+            .output()
+            .map(|output| {
+                if output.status.success() {
+                    String::from_utf8_lossy(&output.stdout).trim().to_string()
+                } else {
+                    format!("Error: {}", String::from_utf8_lossy(&output.stderr))
+                }
+            })
+            .unwrap_or_else(|e| format!("Failed to execute command: {}", e))
+    } else {
+        // Handle single commands
+        let parts: Vec<&str> = cmd.split_whitespace().collect();
+        let (command, args) = parts.split_first().unwrap_or((&"", &[]));
+        
+        Command::new(command)
+            .args(args)
+            .output()
+            .map(|output| {
+                if output.status.success() {
+                    String::from_utf8_lossy(&output.stdout).trim().to_string()
+                } else {
+                    format!("Error: {}", String::from_utf8_lossy(&output.stderr))
+                }
+            })
+            .unwrap_or_else(|e| format!("Failed to execute {}: {}", cmd, e))
+    }
+}
+
 fn check_vscode_installation() -> String {
     let mut result = String::new();
     
@@ -50,17 +92,28 @@ fn check_vscode_installation() -> String {
     result
 }
 
-fn main() -> std::io::Result<()> {
+fn init_cargo_project(project_name: &str) -> std::io::Result<()> {
+    // Initialize cargo project
+    Command::new("cargo")
+        .arg("init")
+        .arg(".")
+        .output()?;
+
+    // Get current directory
+    let current_dir = env::current_dir()?;
+    let project_path = current_dir.display();
+
+    // Update the template with actual project name and path
     let template = format!(
         r#"# Project Information
 
 ## Project Name
 
-{{project_name}}
+{}
 
 ## Project Path
 
-{{project_path}}
+{}
 
 ## Development Environment
 
@@ -104,6 +157,8 @@ Kernel: {}
 {} UTC
 (Get file creation time with: `stat -c '%y' project_path.md`)
 "#,
+        project_name,
+        project_path,
         check_vscode_installation(),
         execute_command("rustc --version"),
         execute_command("cargo --version"),
@@ -118,45 +173,8 @@ Kernel: {}
 
     let mut file = File::create("project_path.md")?;
     file.write_all(template.as_bytes())?;
-    println!("File created successfully at: {}", std::fs::canonicalize("project_path.md")?.display());
+    println!("Project initialized and documentation created at: {}", project_path);
     Ok(())
-}
-
-fn execute_command(cmd: &str) -> String {
-    if cmd.contains("|") {
-        // Handle piped commands
-        let process = Command::new("sh")  // Removed 'mut' as it's not needed
-            .arg("-c")
-            .arg(cmd)
-            .output();
-
-        match process {
-            Ok(output) => {
-                if output.status.success() {
-                    String::from_utf8_lossy(&output.stdout).trim().to_string()
-                } else {
-                    format!("Error: {}", String::from_utf8_lossy(&output.stderr))
-                }
-            }
-            Err(e) => format!("Failed to execute command: {}", e)
-        }
-    } else {
-        // Handle single commands
-        let parts: Vec<&str> = cmd.split_whitespace().collect();
-        let (command, args) = parts.split_first().unwrap_or((&"", &[]));
-        
-        Command::new(command)
-            .args(args)
-            .output()
-            .map(|output| {
-                if output.status.success() {
-                    String::from_utf8_lossy(&output.stdout).trim().to_string()
-                } else {
-                    format!("Error: {}", String::from_utf8_lossy(&output.stderr))
-                }
-            })
-            .unwrap_or_else(|e| format!("Failed to execute {}: {}", cmd, e))
-    }
 }
 
 fn get_current_datetime() -> String {

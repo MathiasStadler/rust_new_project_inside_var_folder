@@ -2,11 +2,11 @@
 
 ## Project Name
 
-{project_name}
+test_project
 
 ## Project Path
 
-{project_path}
+/var/trapapa_vscode_workspace/rust_new_project_inside_var_folder
 
 ## Development Environment
 
@@ -64,7 +64,7 @@ Model:                                   58
 
 # Memory Status
 total        used        free      shared  buff/cache   available
-Mem:            15Gi       9.4Gi       640Mi       802Mi       6.5Gi       6.0Gi
+Mem:            15Gi       9.5Gi       842Mi       810Mi       6.2Gi       5.9Gi
 Swap:           16Gi        11Mi        16Gi
 
 # Disk Usage (Local Hard Drives Only)
