@@ -2,7 +2,7 @@
 
 ## Project Name
 
-default_project
+test_project
 
 ## Project Path
 
@@ -64,65 +64,18 @@ Model:                                   58
 
 # Memory Status
 total        used        free      shared  buff/cache   available
-Mem:            15Gi       4.7Gi       7.4Gi       261Mi       3.9Gi        10Gi
-Swap:           16Gi          0B        16Gi
+Mem:            15Gi       9.5Gi       842Mi       810Mi       6.2Gi       5.9Gi
+Swap:           16Gi        11Mi        16Gi
 
 # Disk Usage (Local Hard Drives Only)
 /dev/sda1        23G   19G  2.9G  87% /
 /dev/sda10       92G   19G   68G  22% /usr
 /dev/sda7        46G   30G   15G  68% /home
-/dev/sda9       9.1G  184K  8.6G   1% /tmp
+/dev/sda9       9.1G   40M  8.6G   1% /tmp
 /dev/sda8       183G   41G  133G  24% /var
 ```
 
 ## Creation Date
 
-June 06, 2025 UTC
+June 05, 2025 UTC
 (Get file creation time with: `stat -c '%y' project_path.md`)
-
-# Project Documentation
-
-## Table of Contents
-
-- [Project Information](#project-information)
-  - [Project Name](#project-name)
-  - [Project Path](#project-path)
-  - [Development Environment](#development-environment)
-  - [OS Version](#os-version)
-  - [Creation Date](#creation-date)
-- [Project Documentation](#project-documentation)
-  - [Table of Contents](#table-of-contents)
-  - [Program Output](#program-output)
-    - [String Uppercase Converter](#string-uppercase-converter)
-
-## Program Output
-
-### String Uppercase Converter
-
-```rust
-// Example usage and output
-$ cargo run --example uppercase_converter
-    Finished dev [unoptimized + debuginfo] target(s) in 0.02s
-     Running `target/debug/examples/uppercase_converter`
-Please enter a string to convert to uppercase:
-hello world
-Uppercase result: HELLO WORLD
-
-// Test results
-$ cargo test --example uppercase_converter
-    Finished test [unoptimized + debuginfo] target(s) in 0.02s
-     Running tests/uppercase_converter.rs
-running 4 tests
-test tests::test_empty_string ... ok
-test tests::test_lowercase_string ... ok
-test tests::test_mixed_case_string ... ok
-test tests::test_with_special_characters ... ok
-
-test result: ok. 4 passed; 0 failed; 0 ignored
-```
-
-The program successfully:
-- Accepts user input
-- Converts strings to uppercase
-- Handles various test cases
-- Follows Rust standard formatting

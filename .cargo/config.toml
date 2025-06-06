@@ -1,0 +1,9 @@
+[build]
+rustflags = [
+    "-C", "instrument-coverage",
+    "-C", "link-dead-code",
+]
+
+[profile.test]
+opt-level = 0
+debug = true

@@ -182,3 +182,33 @@ fn get_current_datetime() -> String {
     let datetime: DateTime<Utc> = now.into();
     datetime.format("%B %d, %Y").to_string()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_execute_command_simple() {
+        let result = execute_command("echo hello");
+        assert_eq!(result, "hello");
+    }
+
+    #[test]
+    fn test_execute_command_piped() {
+        let result = execute_command("echo hello | tr 'h' 'H'");
+        assert_eq!(result, "Hello");
+    }
+
+    #[test]
+    fn test_get_current_datetime() {
+        let date = get_current_datetime();
+        assert!(date.contains("2025")); // Assuming we're in 2025
+    }
+
+    #[test]
+    fn test_check_vscode_installation() {
+        let result = check_vscode_installation();
+        assert!(result.contains("VS Code Version") || 
+                result.contains("VS Code is not installed"));
+    }
+}
