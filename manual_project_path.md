@@ -30,6 +30,30 @@ touch README.md \
   
 I never plan never far ahead. Carpe diam
 
+```bash
 ## How I can get coverage for cargo test? [![alt text][1]](https://stackoverflow.com/questions/69491669/how-i-can-get-coverage-for-cargo-test)
+
+mkdir -p /home/trapapa/vscode_workspace/rust_new_project_inside_var_folder/scripts && \
+cat > /home/trapapa/vscode_workspace/rust_new_project_inside_var_folder/scripts/coverage.sh << 'EOL'
+#!/bin/bash
+set -eu
+
+# Install required components if not present
+rustup component add llvm-tools-preview
+
+# Set environment variables for coverage
+export CARGO_INCREMENTAL=0
+export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off"
+export RUSTDOCFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off"
+
+# Clean and run tests
+cargo clean
+cargo test --example generate_project_path
+
+# Generate coverage report
+grcov . -s . --binary-path ./target/debug/ -t lcov --branch --ignore-not-existing -o ./target/lcov.info
+EOL
+```
+
 <!-- Link sign - Don't Found a better way :-( - You know a better method? - send me a email -->
 [1]: ./img/link_symbol.svg
