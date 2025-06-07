@@ -1,6 +1,5 @@
 [build]
 rustflags = [
-    "-C", "instrument-coverage",
     "-C", "link-dead-code",
 ]
 

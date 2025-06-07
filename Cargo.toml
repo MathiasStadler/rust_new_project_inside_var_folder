@@ -7,8 +7,9 @@ edition = "2021"
 chrono = "0.4"
 
 [dev-dependencies]
-grcov = "0.8.18"
-cargo-tarpaulin = "0.27.1"
+test-case = "3.3.1"
+cargo-llvm-cov = "0.5.39"
 
-[features]
-coverage = []
+[lib]
+name = "rust_new_project_inside_var_folder"
+path = "src/lib.rs"
